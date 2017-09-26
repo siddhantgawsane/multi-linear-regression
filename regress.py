@@ -1,7 +1,7 @@
 import urllib
 from random import randrange, shuffle
 from math import sqrt
-from pylab import arange, plot, title, grid, show
+from pylab import arange, plot, title, grid, show, savefig, clf
 
 def normalize_dataset(dataset, minmax):
 	for row in dataset:
@@ -57,19 +57,15 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
 			row_copy[-1] = None
 		predicted = algorithm(train_set, test_set, *args)
 		actual = [row[-1] for row in fold]
-		# print predicted
-		# print actual
 		t = arange(0.0, 30.0, 1)
-		# s = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-		# s2 = [4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
 		plot(t, actual)
 		plot(t, predicted)
-		 
-		# xlabel('Item (s)')
-		# ylabel('Value')
+
 		title('Predicted vs Actual Regression values for Fold %d' % (folds.index(fold)+1))
 		grid(True)
-		show()
+		savefig('Predicted vs Actual Regression values for Fold %d.png' % (folds.index(fold)+1))
+		clf()
+		# show()
 
 		rmse = calc_rmse(actual, predicted)
 		scores.append(rmse)
@@ -112,7 +108,7 @@ normalize_dataset(datapoints, minmax)
 
 n_folds = 5
 learn_rate = 0.01
-n_epoch = 100
+n_epoch = 10000
 
 scores = evaluate_algorithm(datapoints, linear_regression, n_folds, learn_rate, n_epoch)
 

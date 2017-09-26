@@ -5,7 +5,7 @@ def computeCost(X, y, theta):
     inner = np.power(((X * theta.T) - y), 2)
     return np.sum(inner) / (2 * len(X))
 
-def gradientDescent(X, y, theta, alpha=0.01, iters=75):  
+def gradientDescent(X, y, theta, alpha=0.0001, iters=100):  
     temp = np.matrix(np.zeros(theta.shape))
     parameters = int(theta.ravel().shape[1])
     cost = np.zeros(iters)
@@ -35,17 +35,18 @@ class_map = {
 }
 for row in response.read().split("\n")[:-2]:
 	datapoint = row.split(",")
-	X.append(datapoint[:4])
-	y.append(class_map[datapoint[4]])
+	datapoint.insert(0,1)
+	X.append(datapoint[:5])
+	y.append(class_map[datapoint[5]])
 	datapoints.append(datapoint)
 
 cols = len(datapoints[0])
 X = np.array(X,dtype=float)
 y = np.array(y,dtype=float)
-theta = np.matrix(np.array([0]*4,dtype=float))
+theta = np.matrix(np.array([0]*(cols-1),dtype=float))
 
-X = (X - X.mean()) / X.std()
-y = (y - y.mean()) / y.std()
+# X = (X - X.mean()) / X.std()
+# y = (y - y.mean()) / y.std()
 print X,y
 
 print theta
@@ -54,4 +55,4 @@ g, cost = gradientDescent(X, y, theta)
 
 print g,cost
 
-print "%0.5f" % computeCost(X, y, g)
+print "%f" % computeCost(X, y, g)
